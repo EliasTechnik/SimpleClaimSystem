@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "fr.xyness"
-version = "1.11.6.1"
+version = "1.11.6.1-FORKBYELIASTECHNIK-0.1"
 
 java {
     toolchain {
@@ -35,7 +35,8 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("com.zaxxer:HikariCP:4.0.3")
+    //implementation("com.zaxxer:HikariCP:4.0.3")
+    compileOnly("com.zaxxer:HikariCP:4.0.3")
     compileOnly(files("libs/PlaceholderAPI-2.11.6.jar"))
     compileOnly("com.github.LoneDev6:api-itemsadder:3.6.1")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4") {

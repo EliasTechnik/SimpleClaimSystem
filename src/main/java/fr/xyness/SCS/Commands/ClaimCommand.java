@@ -194,17 +194,23 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
      * Handles the command for description
      */
     private void handleDesc(Player player, String playerName, String[] args) {
+        //check for permission
         if (!instance.getPlayerMain().checkPermPlayer(player, "scs.command.claim.setdesc")) {
         	player.sendMessage(instance.getLanguage().getMessage("cmd-no-permission"));
             return;
         }
+
+        //check if claim belongs to owner
         if (instance.getMain().getClaimsNameFromOwner(playerName).contains(args[1])) {
             String description = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+
+            //check if claim desc is outside the length limit
             if (description.length() > Integer.parseInt(instance.getSettings().getSetting("max-length-claim-description"))) {
             	player.sendMessage(instance.getLanguage().getMessage("claim-description-too-long"));
                 return;
             }
-            if (!description.matches("^[a-zA-Z0-9]+$")) {
+            //check against forbidden chars
+            if (!description.matches("^[a-zA-Z0-9.,#~:=\\-+?!()\\[\\]\"'&$*^|_\\s]+$")) { //old regex: ^[a-zA-Z0-9]+$
             	player.sendMessage(instance.getLanguage().getMessage("incorrect-characters-description"));
             	return;
             }
