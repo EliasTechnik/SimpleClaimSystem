@@ -125,8 +125,8 @@ public class ClaimPl3xMap implements EventListener {
 
             Options options = Options.builder()
                     .tooltipContent(hoverText)
-                    .fillColor(Colors.setAlpha(0xFF, Integer.parseInt(fillColor, 16)))
-                    .strokeColor(Colors.setAlpha(0xFF, Integer.parseInt(strokeColor, 16)))
+                    .fillColor(Colors.setAlpha(getAlpha(fillColor), getRGB(fillColor)))
+                    .strokeColor(Colors.setAlpha(getAlpha(strokeColor), getRGB(strokeColor)))
                     .strokeWeight(2)
                     .fill(true)
                     .stroke(true)
@@ -174,8 +174,8 @@ public class ClaimPl3xMap implements EventListener {
                 if (marker.getKey().equals(markerId)) {
                     Options newOptions = Options.builder()
                             .tooltipContent(hoverText)
-                            .fillColor(Colors.setAlpha(0xFF, Integer.parseInt(fillColor, 16)))
-                            .strokeColor(Colors.setAlpha(0xFF, Integer.parseInt(strokeColor, 16)))
+                            .fillColor(Colors.setAlpha(getAlpha(fillColor), getRGB(fillColor)))
+                            .strokeColor(Colors.setAlpha(getAlpha(strokeColor), getRGB(strokeColor)))
                             .strokeWeight(2)
                             .fill(true)
                             .stroke(true)
@@ -200,5 +200,27 @@ public class ClaimPl3xMap implements EventListener {
             	layer.getMarkers().removeIf(marker -> marker.getKey().equals(markerId));
             }
         });
+    }
+
+    private int getAlpha(String colorHex){
+        if(colorHex.length() == 8 ){
+            return Integer.parseInt(colorHex.substring(0, 2), 16);
+        }
+        else{
+            return 0xFF;
+        }
+    }
+
+    private String getRGBString(String colorHex){
+        if(colorHex.length() == 8 ){
+            return colorHex.substring(2);
+        }
+        else{
+            return colorHex;
+        }
+    }
+
+    private int getRGB(String colorHex){
+        return Integer.parseInt(getRGBString(colorHex), 16);
     }
 }
