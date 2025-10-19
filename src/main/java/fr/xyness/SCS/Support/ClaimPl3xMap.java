@@ -24,6 +24,9 @@ import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.registry.Registry;
 import net.pl3x.map.core.util.Colors;
 
+import static fr.xyness.SCS.helper.Preprocessor.getAlpha;
+import static fr.xyness.SCS.helper.Preprocessor.getRGB;
+
 /**
  * This class integrates claims with the Pl3xMap plugin, allowing claims to be displayed as markers on the Pl3xMap.
  */
@@ -72,6 +75,19 @@ public class ClaimPl3xMap implements EventListener {
      */
     @EventHandler
     public void onPl3xMapEnabled(Pl3xMapEnabledEvent event) {
+        addAllClaimsToPl3xMap();
+    }
+
+    
+    // ********************
+    // *  Other Methods   *
+    // ********************
+
+    /**
+     * This method  initializes the layers for each world
+     * and creates markers for all existing claims.
+     */
+    public void addAllClaimsToPl3xMap() {
         instance.executeAsync(() -> {
             Registry<net.pl3x.map.core.world.World> worldRegistry = Pl3xMap.api().getWorldRegistry();
             Set<Claim> claims = instance.getMain().getAllClaims();
@@ -88,7 +104,7 @@ public class ClaimPl3xMap implements EventListener {
                     layers.put(world, (SimpleLayer) layer);
                     for (Claim claim : claims) {
                         if (claim.getLocation().getWorld().equals(world)) {
-                        	createClaimZone(claim);
+                            createClaimZone(claim);
                         }
                     }
                 }
@@ -97,10 +113,13 @@ public class ClaimPl3xMap implements EventListener {
         });
     }
 
-    
-    // ********************
-    // *  Other Methods   *
-    // ********************
+    /**
+     * Removes all claim markers from the Pl3xMap.
+     */
+    public void removeAllClaimsFromPl3xMap() {
+        layers.values().forEach(layer -> layer.getMarkers().clear());
+        layers.clear();
+    }
 
     
     /**
@@ -200,27 +219,5 @@ public class ClaimPl3xMap implements EventListener {
             	layer.getMarkers().removeIf(marker -> marker.getKey().equals(markerId));
             }
         });
-    }
-
-    private int getAlpha(String colorHex){
-        if(colorHex.length() == 8 ){
-            return Integer.parseInt(colorHex.substring(0, 2), 16);
-        }
-        else{
-            return 0xFF;
-        }
-    }
-
-    private String getRGBString(String colorHex){
-        if(colorHex.length() == 8 ){
-            return colorHex.substring(2);
-        }
-        else{
-            return colorHex;
-        }
-    }
-
-    private int getRGB(String colorHex){
-        return Integer.parseInt(getRGBString(colorHex), 16);
     }
 }

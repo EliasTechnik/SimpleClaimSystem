@@ -7,11 +7,11 @@ plugins {
 }
 
 group = "fr.xyness"
-version = "1.11.6.1"
+version = "1.11.6.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(22))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 

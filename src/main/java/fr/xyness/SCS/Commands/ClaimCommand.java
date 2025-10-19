@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import fr.xyness.SCS.helper.Preprocessor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -56,6 +57,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import fr.xyness.SCS.Guis.ClaimListGui;
 import fr.xyness.SCS.Guis.ClaimMembersGui;
 import fr.xyness.SCS.Guis.ClaimMainGui;
+
+import static fr.xyness.SCS.helper.Preprocessor.preprocessArgs;
 
 /**
  * Command executor and tab completer for the /claim command.
@@ -187,23 +190,27 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
         	handleDesc(player, playerName, args);
             return true;
         }
-        
+
+        //combine args in quotes so that players can use spaces in names
+        String[] pArgs = preprocessArgs(args);
+
+
         // Switch for args
-        switch(args.length) {
+        switch(pArgs.length) {
         	case 0:
         		handleArgZero(player,playerName,cPlayer);
         		break;
         	case 1:
-        		handleArgOne(player,playerName,cPlayer,args);
+        		handleArgOne(player,playerName,cPlayer,pArgs);
         		break;
         	case 2:
-        		handleArgTwo(player,playerName,cPlayer,args);
+        		handleArgTwo(player,playerName,cPlayer,pArgs);
         		break;
         	case 3:
-        		handleArgThree(player,playerName,cPlayer,args);
+        		handleArgThree(player,playerName,cPlayer,pArgs);
         		break;
         	default:
-        		instance.getMain().getHelp(player, args[0], "claim");
+        		instance.getMain().getHelp(player, pArgs[0], "claim");
         		break;
         }
         return true;

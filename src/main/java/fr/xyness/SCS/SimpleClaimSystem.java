@@ -213,6 +213,8 @@ public class SimpleClaimSystem extends JavaPlugin {
     	boolean[] status = {true};
     	
     	Runnable reloadTask = () -> {
+
+            boolean reAddPl3xmap = false;
     		
             if (reload) {
             	sender.sendMessage(getLanguage().getMessage("reload-attempt"));
@@ -679,11 +681,19 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("bluemap-claim-border-color", getConfig().getString("bluemap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("bluemap-claim-fill-color", getConfig().getString("bluemap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("bluemap-claim-hover-text", getConfig().getString("bluemap-settings.claim-hover-text"));
-            
+
+
+
             // Add Pl3xmap settings
             configC = getConfig().getString("pl3xmap");
             if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("pl3xmap")) {
-            	if (!reload) pl3xmapInstance = new ClaimPl3xMap(this);
+            	if (!reload) {
+                    pl3xmapInstance = new ClaimPl3xMap(this);
+                    //pl3xmapInstance.removeAllClaimsFromPl3xMap();
+                    //info(ChatColor.YELLOW + "Purged all claims from Pl3xmap.");
+                    //reAddPl3xmap = true;
+
+                }
             } else {
             	claimSettingsInstance.addSetting("pl3xmap", "false");
             }
@@ -1017,6 +1027,13 @@ public class SimpleClaimSystem extends JavaPlugin {
                 	claimBossBarInstance.activeBossBar(p, p.getLocation().getChunk());
                 });
             }
+
+            if(reAddPl3xmap){
+                pl3xmapInstance.addAllClaimsToPl3xMap();
+                info(ChatColor.YELLOW + "Added all claims to Pl3xmap.");
+            }
+
+
             if(reload) {
             	info("==========================================================================");
                 if(status[0]) {
@@ -1026,7 +1043,9 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
             }
     	};
-    	
+
+
+
     	if(reload) {
     		executeAsync(() -> reloadTask.run());
     	} else {
